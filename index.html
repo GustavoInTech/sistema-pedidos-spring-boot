@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clientes e pedidos</title>
+  </head>
+  <body>
+    <h1>Clientes e pedidos</h1>
+    <h2>Adicionar Cliente</h2>
+    <input id="novoClienteNome" placeholder="nome" />
+    <input id="novoClienteEmail" placeholder="Email" />
+    <button onclick="adicionarCliente()">Adicionar Cliente</button>
+
+    <script>
+      const apiBase = "http://localhost:8080/api";
+
+      async function adicionarCliente() {
+        const nome = document.getElementById("novoClienteNome").value;
+        const email = document.getElementById("novoClienteEmail").value;
+        console.log(nome, email);
+
+        try {
+          const resposta = await fetch(`${apiBase}/adicionar_clientes`, {
+            method: "POST",
+            headers: { "Content-Type": "application/Json" },
+            body: JSON.stringify({ nome, email }),
+          });
+          if (!resposta.ok) throw new Error("Erro ao adicionar o cliente");
+          documente.getElementById("novoClienteNome").value = "";
+          documente.getElementById("novoClienteEmail").value = "";
+        } catch (err) {
+          alert(err.message);
+        }
+      }
+    </script>
+  </body>
+</html>
