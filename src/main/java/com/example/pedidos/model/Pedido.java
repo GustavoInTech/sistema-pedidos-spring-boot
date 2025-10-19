@@ -1,5 +1,7 @@
 package com.example.pedidos.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -11,6 +13,7 @@ public class Pedido {
     private Long id;
     private String descricao;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
