@@ -6,97 +6,19 @@
     <title>Clientes e pedidos</title>
     <style>
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        background-color: #f0f2f5;
-        margin: 0;
-        padding: 20px;
-        color: #333;
+        font-family: Arial, sans-serif;
+        margin: 20px;
       }
-
-      h1,
-      h2 {
-        color: #1c1e21;
-      }
-
       input,
       button {
-        padding: 10px 15px;
-        margin: 8px 0;
-        border-radius: 6px;
-        border: 1px solid #ddd;
-        font-size: 16px;
-        transition: all 0.3s ease;
+        margin: 5px;
       }
-
-      input {
-        width: calc(50% - 10px);
-      }
-
-      button {
-        background-color: #007bff;
-        color: white;
-        cursor: pointer;
-        border: none;
-      }
-
-      button:hover {
-        background-color: #0056b3;
-        transform: translateY(-2px);
-      }
-
-      .container {
-        background-color: #ffffff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-      }
-
-      #clientes {
+      ul {
         list-style: none;
         padding: 0;
       }
-
-      #clientes > li {
-        background-color: #f9fafb;
-        margin-top: 10px;
-        padding: 15px;
-        border-radius: 8px;
-        border-left: 5px solid #007bff;
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: space-between;
-      }
-
-      #clientes > li strong {
-        flex-grow: 1;
-        margin-right: 10px;
-      }
-
-      #clientes > li button {
-        margin: 5px;
-        padding: 8px 12px;
-      }
-
-      #clientes > li button:nth-of-type(1) {
-        background-color: #dc3545;
-      }
-
-      #clientes > li button:nth-of-type(1):hover {
-        background-color: #c82333;
-      }
-
-      ul[id^="pedidos-"] {
-        padding-left: 20px;
-        margin-top: 10px;
-        border-top: 1px solid #eee;
-      }
-
-      ul[id^="pedidos-"] li {
+      li {
         margin: 5px 0;
-        color: #555;
       }
     </style>
   </head>
