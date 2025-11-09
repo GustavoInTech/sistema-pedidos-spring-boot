@@ -46,10 +46,15 @@
 
           clientes.forEach((cliente) => {
             const li = document.createElement("li");
+            li.id = `cliente-li-${cliente.id}`;
             li.innerHTML = `
-            <strong>${cliente.id} - ${cliente.nome}</strong> (${cliente.email})
-            <button onclick="deletarCliente(${cliente.id})">Deletar</button>
-            <button onclick="mostrarFormPedido(${cliente.id})">Adicionar Pedido</button>
+            <div id="cliente-info-${cliente.id}" >
+              <strong>${cliente.id} - ${cliente.nome}</strong> (${cliente.email})
+              <button onclick="mostarFormEditarCliente(${cliente.id}, '${cliente.nome}', '${cliente.email}')">
+              Editar Cliente</button>
+              <button onclick="deletarCliente(${cliente.id})">Deletar</button>
+              <button onclick="mostrarFormPedido(${cliente.id})">Adicionar Pedido</button>
+            </div>
             <ul id="pedidos-${cliente.id}"></ul>
           `;
             ul.appendChild(li);
@@ -92,6 +97,36 @@
         }
       }
 
+      function mostarFormEditarCliente(clienteId, nomeAtual, emailAtual) {
+        const divInfo = document.getElementById(`cliente-info-${clienteId}`);
+        divInfo.innerHTML = `
+            <input id="inputEditarNome-${clienteId}" value="${nomeAtual}" >
+            <input id="inputEditarEmail-${clienteId}" value="${emailAtual}" >
+            <button onclick="atualizarCliente(${clienteId})">Salvar</button>
+            <button onclick="carregarCliente()">Cancelar</button>
+        `;
+      }
+
+      async function atualizarCliente(clienteId) {
+        const nome = document.getElementById(
+          `inputEditarNome-${clienteId}`
+        ).value;
+        const email = document.getElementById(
+          `inputEditarEmail-${clienteId}`
+        ).value;
+
+        try {
+          await fetch(`${apiBase}/clientes/${clienteId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ nome, email }),
+          });
+          carregarClientes();
+        } catch (erro) {
+          alert("Erro ao atualizar o cliente: " + erro.message);
+        }
+      }
+
       // Carregar pedidos de um cliente
       async function carregarPedidos(clienteId) {
         try {
@@ -101,7 +136,13 @@
           ulPedidos.innerHTML = "";
           pedidos.forEach((p) => {
             const li = document.createElement("li");
-            li.textContent = `${p.id} - ${p.descricao}`;
+            li.id = `pedido-li-${p.id}`;
+            li.innerHTML = `
+              <span>${p.id} - ${p.descricao}</span>
+              <button onclick="mostrarFormEditarPedido(${p.id}, ${clienteId}, \`${p.descricao}\`)">
+                Editar</buton>
+              <button onclick="deletarPedido(${p.id}, ${clienteId})">Deletar</button>
+                `;
             ulPedidos.appendChild(li);
           });
         } catch (err) {
@@ -134,6 +175,50 @@
           carregarPedidos(clienteId);
         } catch (err) {
           alert("Erro ao adicionar pedido: " + err.message);
+        }
+      }
+
+      async function deletarPedido(pedidoId, clienteId) {
+        try {
+          await fetch(`${apiBase}/pedidos/${pedidoId}`, {
+            method: "DELETE",
+          });
+          carregarPedidos(clienteId);
+        } catch (erro) {
+          alert("Erro ao deletar pedido: " + erro.message);
+        }
+      }
+
+      function mostrarFormEditarPedido(pedidoId, clienteId, descricaoAtual) {
+        const liPedido = document.getElementById(`pedido-li-${pedidoId}`);
+        liPedido.innerHTML = `
+        <input id="inputEditarPedido-${pedidoId}" value="${descricaoAtual}">
+        <button onclick="atualizarPedido(${pedidoId}, ${clienteId})">Salvar</button>
+        <button onclick="carregarPedido(${clienteId})">Cancelar</button>
+        `;
+      }
+
+      async function atualizarPedido(pedidoId, clienteId) {
+        const novaDescricao = document.getElementById(
+          `inputEditarPedido-${pedidoId}`
+        ).value;
+        try {
+          const pedidoAtualizado = {
+            id: pedidoId,
+            descricao: novaDescricao,
+            cliente: {
+              id: clienteId,
+            },
+          };
+
+          await fetch(`${apiBase}/pedidos/${pedidoId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(pedidoAtualizado),
+          });
+          carregarPedidos(clienteId);
+        } catch (erro) {
+          alert("Erro ao atualizar o pedido: " + erro.message);
         }
       }
     </script>
